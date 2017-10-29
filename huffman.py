@@ -11,7 +11,7 @@ from semantic_codec.architecture.disassembler_readers import ElfioTextDisassembl
 from semantic_codec.architecture.instruction_modifier import InstructionModifier
 from semantic_codec.compressor.huffman import huffman_size, InstructionPartFrequencyCounter, \
     InstructionPartFrequencyChanger
-from semantic_codec.distributed.qos_functions import MockQoSFunction
+from semantic_codec.distributed.qos_functions import MockQoSFunction, DistributedQoS
 
 ARM_SIMPLE = os.path.join(os.path.dirname(__file__), 'tests/data/basicmath_small.disam')
 program = ElfioTextDisassembleReader(ARM_SIMPLE).read_instructions()
@@ -24,7 +24,7 @@ print('Original Huffman size Opcodes:      {}'.format(huffman_size(fc.opcode_fre
 print('Original Huffman size Conditionals: {}'.format(huffman_size(fc.cond_frequency)))
 
 # The QoS function that will determine if the change produces a correct program or not
-qos = MockQoSFunction()
+_qos = DistributedQoS("10.0.0.83:5555", 'basic_math')
 changer = InstructionPartFrequencyChanger(program, qos, fc)
 # Try to change the registers
 changer.change_registers()

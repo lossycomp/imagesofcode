@@ -1,3 +1,8 @@
+import struct
+
+import zmq
+
+
 class MockQoSFunction(object):
 
     def __init__(self):
@@ -12,3 +17,16 @@ class MockQoSFunction(object):
         else:
             self._counter += 1
             return False
+
+class DistributedQoS(object):
+
+    def __init__(self, ip, program_name):
+        self._context = zmq.Context()
+        self._socket = self._context.socket(zmq.REQ)
+        self._socket.connect(ip)
+
+    def run(self, new_instruction, address):
+        self._socket.send_json(struct.pack('@L@L', new_instruction, address))
+
+
+
