@@ -56,10 +56,10 @@ class InstructionPartFrequencyChanger(object):
                 # Flag to indicate that at least a register was correctly changed
                 any_correct = False
                 while not any_correct and index > part:
-                    # New, most frequent register
+                    # New, most frequent part
                     new_part = freq_sorted[index]
                     # Now try to change any infrequent register from the instruction.
-                    # There could be more than one use of the register
+                    # There could be more than one use of the part
                     # So try them all
                     encoding = instruction.encoding
                     for register_part in get_parts(encoding, part):
@@ -81,6 +81,23 @@ class InstructionPartFrequencyChanger(object):
 
             progress_bar.suffix = 'Iterations: {})'.format(i)
             progress_bar.progress()
+
+    def change_conditionals(self):
+        insmod = InstructionModifier()
+        self._init_counter()
+        self._change_parts(insmod.modify_cond,
+                           insmod.get_conditional_parts,
+                           self._counter.cond_with,
+                           self._counter.cond_frequency)
+
+    def change_opcodes(self):
+        insmod = InstructionModifier()
+        self._init_counter()
+        self._change_parts(insmod.modify_cond,
+                           insmod.get_opcode_parts,
+                           self._counter.opcode_with,
+                           self._counter.opcode_frequency)
+
 
 class InstructionPartFrequencyCounter(object):
     """

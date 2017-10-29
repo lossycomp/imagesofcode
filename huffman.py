@@ -28,5 +28,7 @@ qos = MockQoSFunction()
 changer = InstructionPartFrequencyChanger(program, qos, fc)
 # Try to change the registers
 changer.change_registers()
+changer.change_conditionals()
+changer.change_opcodes()
 # Print after
 print('Original Huffman size Registers:    {}'.format(huffman_size(fc.reg_frequency)))

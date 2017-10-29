@@ -76,6 +76,12 @@ class InstructionModifier(object):
         else:
             return Bits.copy_bits(immediate, inst, 0, 7, 0)
 
+    def get_opcode_parts(self, encoding, conditional):
+        return ['c']
+
+    def get_conditional_parts(self, encoding, conditional):
+        return ['c']
+
     def get_registers_parts(self, encoding, register):
         """
         Get in which parts of an instruction is possible to find a given register
